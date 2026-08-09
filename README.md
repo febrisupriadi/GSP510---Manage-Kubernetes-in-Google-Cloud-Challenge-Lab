@@ -4,7 +4,7 @@
 
 ### 📋 Lab Setup & Credentials
 
-ParameterValue
+Parameter Value
 ****
 **Username**: student-02-7ecb2c47ff86@qwiklabs.net
 ****
@@ -29,6 +29,7 @@ ParameterValue
 Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel proyek: 
 
     ```bash
+    
         export PROJECT_ID="qwiklabs-gcp-04-ed402c1f1a34"
         export CLUSTER_NAME="hello-world-1dh2"
         export REGION="us-west1"
