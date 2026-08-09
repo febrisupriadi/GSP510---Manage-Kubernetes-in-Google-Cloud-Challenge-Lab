@@ -29,7 +29,6 @@ ParameterValue
 Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel proyek: 
 
     ```
-    
     export PROJECT_ID="qwiklabs-gcp-04-ed402c1f1a34"
     export CLUSTER_NAME="hello-world-1dh2"
     export REGION="us-west1"
@@ -37,6 +36,7 @@ Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel
     export NAMESPACE_NAME="gmp-bhfn"
     export REPO_NAME="hello-repo"
     export SERVICE_NAME="helloweb-service-huhm"
+    ```
 
 
 
@@ -44,17 +44,16 @@ Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel
 
 1. Jalankan perintah pembuatan cluster awal berikut: 
 
-bash
-
-gcloud beta container clusters create hello-world-1dh2 \
-    --num-nodes=3 \
-    --min-nodes 2 \
-    --max-nodes 6 \
-    --zone $ZONE
-
-Gunakan kode dengan hati-hati.
+    ```    
+    gcloud beta container clusters create hello-world-1dh2 \
+        --num-nodes=3 \
+        --min-nodes 2 \
+        --max-nodes 6 \
+        --zone $ZONE
+    ```
 
 *Tunggu sekitar 4-5 menit hingga status berubah menjadi RUNNING.*
+
 2. Lakukan pembaruan fitur (Autoscaling & Managed Prometheus) agar lulus penilaian lab: 
 
 bash
