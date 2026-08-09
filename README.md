@@ -28,7 +28,7 @@ ParameterValue
 
 Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel proyek: 
 
-    ```
+    ```bash
     export PROJECT_ID="qwiklabs-gcp-04-ed402c1f1a34"
     export CLUSTER_NAME="hello-world-1dh2"
     export REGION="us-west1"
@@ -44,7 +44,7 @@ Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel
 
 1. Jalankan perintah pembuatan cluster awal berikut: 
 
-    ```    
+    ```bash    
     gcloud beta container clusters create hello-world-1dh2 \
         --num-nodes=3 \
         --min-nodes 2 \
