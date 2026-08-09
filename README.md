@@ -29,13 +29,13 @@ ParameterValue
 Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel proyek: 
 
     ```bash
-    export PROJECT_ID="qwiklabs-gcp-04-ed402c1f1a34"
-    export CLUSTER_NAME="hello-world-1dh2"
-    export REGION="us-west1"
-    export ZONE="us-west1-a"
-    export NAMESPACE_NAME="gmp-bhfn"
-    export REPO_NAME="hello-repo"
-    export SERVICE_NAME="helloweb-service-huhm"
+        export PROJECT_ID="qwiklabs-gcp-04-ed402c1f1a34"
+        export CLUSTER_NAME="hello-world-1dh2"
+        export REGION="us-west1"
+        export ZONE="us-west1-a"
+        export NAMESPACE_NAME="gmp-bhfn"
+        export REPO_NAME="hello-repo"
+        export SERVICE_NAME="helloweb-service-huhm"
     ```
 
 
@@ -52,7 +52,7 @@ Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel
         --zone $ZONE
     ```
 
-*Tunggu sekitar 4-5 menit hingga status berubah menjadi RUNNING.*
+    *Tunggu sekitar 4-5 menit hingga status berubah menjadi RUNNING.*
 
 2. Lakukan pembaruan fitur (Autoscaling & Managed Prometheus) agar lulus penilaian lab: 
 
