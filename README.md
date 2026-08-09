@@ -6,39 +6,39 @@
 
 ParameterValue
 ****
-**Username**student-02-7ecb2c47ff86@qwiklabs.net
+**Username**: student-02-7ecb2c47ff86@qwiklabs.net
 ****
-**Password**bKGEJCOPxQz2
+**Password**: bKGEJCOPxQz2
 ****
-**Project ID**qwiklabs-gcp-04-ed402c1f1a34
+**Project ID**: qwiklabs-gcp-04-ed402c1f1a34
 ****
-**Cluster Name**hello-world-1dh2
+**Cluster Name**: hello-world-1dh2
 ****
-**Region**us-west1
+**Region**: us-west1
 ****
-**Zone**us-west1-a
+**Zone**: us-west1-a
 ****
-**Namespace Name**gmp-bhfn
+**Namespace Name**: gmp-bhfn
 ****
-**Repo Name**hello-repo
+**Repo Name**: hello-repo
 ****
-**Service Name**helloweb-service-huhm
+**Service Name**: helloweb-service-huhm
 
 ### 🛠️ Environment Variables Configuration
 
 Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel proyek: 
 
-bash
+    ```
+    
+    export PROJECT_ID="qwiklabs-gcp-04-ed402c1f1a34"
+    export CLUSTER_NAME="hello-world-1dh2"
+    export REGION="us-west1"
+    export ZONE="us-west1-a"
+    export NAMESPACE_NAME="gmp-bhfn"
+    export REPO_NAME="hello-repo"
+    export SERVICE_NAME="helloweb-service-huhm"
 
-export PROJECT_ID="qwiklabs-gcp-04-ed402c1f1a34"
-export CLUSTER_NAME="hello-world-1dh2"
-export REGION="us-west1"
-export ZONE="us-west1-a"
-export NAMESPACE_NAME="gmp-bhfn"
-export REPO_NAME="hello-repo"
-export SERVICE_NAME="helloweb-service-huhm"
 
-Gunakan kode dengan hati-hati.
 
 ### 🚀 Task 1: Create a GKE Cluster
 
