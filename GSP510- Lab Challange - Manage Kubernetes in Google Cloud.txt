@@ -1,0 +1,355 @@
+Lab Setup
+Username
+student-02-7ecb2c47ff86@qwiklabs.net
+Password
+bKGEJCOPxQz2
+Project ID
+qwiklabs-gcp-04-ed402c1f1a34
+Cluster Name
+hello-world-1dh2
+Region
+us-west1
+Zone
+us-west1-a
+Namespace Name
+gmp-bhfn
+Repo Name
+hello-repo
+Service Name
+helloweb-service-huhm
+
+
+
+-----
+EXPORT menggunakan format ini :
+
+export PROJECT_ID="PROJECT_ID"
+export CLUSTER_NAME="CLUSTER_NAME"
+export REGION="REGION"
+export ZONE="ZONE"
+export NAMESPACE_NAME="NAMESPACE_NAME"
+export REPO_NAME="REPO_NAME"
+export SERVICE_NAME="SERVICE_NAME"
+
+>>>>
+export PROJECT_ID="qwiklabs-gcp-04-ed402c1f1a34"
+export CLUSTER_NAME="hello-world-1dh2"
+export REGION="us-west1"
+export ZONE="us-west1-a"
+export NAMESPACE_NAME="gmp-bhfn"
+export REPO_NAME="hello-repo"
+export SERVICE_NAME="helloweb-service-huhm"
+
+
+Task.1
+Create a GKE cluster named 'hello-world-1dh2' 
+
+gcloud beta container clusters create hello-world-1dh2 --num-nodes=3 --min-nodes 2 --max-nodes 6 --zone $ZONE
+
+....tungu sampai proses 'Creating cluster ...working dan complete! [ 4 atau 5 menit] >>> STATUS: RUNNING
+
+==Note: Your Pod address range (`--cluster-ipv4-cidr`) can accommodate at most 1008 node(s).
+Creating cluster hello-world-1dh2 in us-west1-a... Cluster is being health-checked (Kubernetes Control Plane is healthy)...done.        
+Created [https://container.googleapis.com/v1beta1/projects/qwiklabs-gcp-04-ed402c1f1a34/zones/us-west1-a/clusters/hello-world-1dh2].
+To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/us-west1-a/hello-world-1dh2?project=qwiklabs-gcp-04-ed402c1f1a34
+kubeconfig entry generated for hello-world-1dh2.
+NAME: hello-world-1dh2
+LOCATION: us-west1-a
+MASTER_VERSION: 1.35.6-gke.1250000
+MASTER_IP: 8.229.184.154
+MACHINE_TYPE: e2-medium
+NODE_VERSION: 1.35.6-gke.1250000
+NUM_NODES: 3
+STATUS: RUNNING
+STACK_TYPE: IPV4===
+
+Lakukan update:
+gcloud container clusters update hello-world-1dh2 \
+    --enable-autoscaling \
+    --enable-managed-prometheus \
+    --min-nodes=2 \
+    --max-nodes=6 \
+    --zone=us-west1-a
+
+
+##cek point task1
+
+
+--------------------------------------
+
+##TASK 2
+
+gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE
+
+beri nama sesuai perintah:
+kubectl create ns namespace name
+>>> kubectl create ns gmp-bhfn
+
+kemudian cmd sesuai perintah task:
+gcloud storage cp gs://spls/gsp510/prometheus-app.yaml .
+
+
+kemudian open editor!!
+edit sesuai perintah 
+
+Buka file: prometheus-app.yaml
+
+Update the <todo> sections (lines 35-38) with the following configuration.
+
+ganti yang bertanda <todo> ---> 3 items.
+
+containers.image: nilebox/prometheus-example-app:latest
+containers.name: prometheus-test
+ports.name: metrics
+
+save!!
+
+---Kembali ke terminal
+
+DEPLOY APPS
+
+kubectl -n namespace name apply -f prometheus-app.yaml
+>>> kubectl -n gmp-bhfn apply -f prometheus-app.yaml
+
+gcloud storage cp gs://spls/gsp510/pod-monitoring.yaml .
+
+
+KEMBALI ke Editor buka >> POD monitor
+lakukan editing sesuai perintah
+Update the <todo> sections (lines 18-24) with the following configuration:
+
+metadata.name: prometheus-test
+labels.app.kubernetes.io/name: prometheus-test
+matchLabels.app: prometheus-test
+endpoints.interval: 50s
+
+save!
+
+
+kemudian running cmd:
+kubectl -n namespace name apply -f pod-monitoring.yaml
+>>> kubectl -n gmp-bhfn apply -f pod-monitoring.yaml
+
+
+cek point! 
+[mungkin memakan Waktu beberapa menit]
+
+
+----------------------
+
+TASK 3
+
+download demo ke direktori hello-app:
+gcloud storage cp -r gs://spls/gsp510/hello-app/ .
+
+
+lihat file: ls
+dan kita melihat ada direktori hello-app
+
+cd hello-app/
+
+lakukan lagi: ls
+
+cd manifests/
+ls
+
+kubectl -n namespace name apply -f helloweb-deployment.yaml
+>>> kubectl -n gmp-bhfn apply -f helloweb-deployment.yaml
+---> deployment.apps/helloweb created
+
+
+cek point!
+
+--------------------------
+
+TASK 4
+
+(bilamana perlu refresh browser)
+Logs Explorer (cari di bagian pencarian atas)
+klik All resourses 
+
+wait, jika sudah terbuka
+cari ke Bawah 'Kubernetes Pod'
+
+select region 
+select cluster yang terbuak : hello-word-1dh2
+klik 'Apply'
+
+
+tunggu sampai query otomatis dibuat
+jika sudah dibuat, akan terbuka klik Got It
+
+kemudian klik 'All severities' dan klik 'Warning and higher'
+
+jiak sudah berjalan,
+klik Action >>> Create Metric
+>>> Create log-based metric:
+Type: Counter
+Details Log Metric Name: pod-image-errors
+klik 'Create Metric'
+
+
+Kemudian Create Alert Policy
+Buka menu sebelah kiri >>> Log based metrics
+pada bagian Name: pod-image-errors
+klik tiga titik sebelah kanan
+kemudian klik 'Create alert from metric'
+
+sesuaikan:
+Create an Alerting Policy based on the logs-based metric you just created. Use the following details to configure your policy:
+
+Rolling Window: 10 min
+Rolling window function: count
+Time series aggregation: sum
+<next>
+Condition type: Threshold
+Alert trigger: Any time series violates
+Threshold position: Above threshold
+Threshold value: 0
+<next>
+Use notification channel: Disable!!!
+Alert policy name: Pod Error Alert
+
+
+Jangan lupa!!! uncheck pilihan 'Use notification channel'
+
+Klik 'Create Policy'
+
+cek point!
+
+
+-----
+TASK 5
+Replace the <todo> in the image section in the helloweb-deployment.yaml deployment manifest with the following image:
+
+
+Buka editor
+buka folder hello-app >> manifests>> helloweb-deployment.yaml
+
+ganti yang bertanda <todo>
+image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
+
+save!
+
+Kemudian, untuk :: Delete the helloweb deployment from your cluster.
+
+Kembali ke terminal
+cmd: kubectl delete deployment helloweb -nnamespace name
+>>> kubectl delete deployment helloweb -ngmp-bhfn
+---> kubectl delete deployment helloweb -ngmp-bhfn
+
+Kemudian untuk : Deploy the updated helloweb-deployment.yaml manifest onto your cluster on the namespace name namespace.
+
+cmd: kubectl -n namespace name apply -f helloweb-deployment.yaml
+>>> kubectl -n gmp-bhfn apply -f helloweb-deployment.yaml
+---> deployment.apps/helloweb created
+artinya dicreated ulang dengan image baru
+
+
+cmd: kubectl get pods -n namespace name
+>>> kubectl get pods -n gmp-bhfn
+
+cek point 5!
+
+
+-----
+TASK 6
+{Artifact Registry named repo name = 'hello-repo'}
+
+Buka editor
+hello-app >>manifest >>main.go
+---> line 49: Version: 2.0.0
+save!
+
+Kemudian:
+gcloud auth configure-docker
+
+copy region (lihat di setting Labs)
+
+pastikan berada di direktori hello-app ya!!
+
+docker build -t <region>-docker.pkg.dev/$PROJECT_ID/hello-repo/hello-app:v2 .
+
+>>>docker build -t us-west1-docker.pkg.dev/$PROJECT_ID/hello-repo/hello-app:v2 .
+
+
+...tunggu sampai complete
+
+docker push <region>-docker.pkg.dev/$PROJECT_ID/hello-repo/hello-app:v2
+
+>>>docker push us-west1-docker.pkg.dev/$PROJECT_ID/hello-repo/hello-app:v2
+
+....tunggu proses 'Pushed' selesai
+
+Kemudian:
+Push the newly built Docker image to your repository in Artifact Registry using the v2 tag.
+
+>>buka editor
+>>hello-app >>manifest >>helloweb-deployment.yaml
+replace image: ....
+
+image: <region>-docker.pkg.dev/$PROJECT_ID/hello-repo/hello-app:v2
+
+ganti juga $PROJECT_ID 
+>>>image: us-west1-docker.pkg.dev/qwiklabs-gcp-04-ed402c1f1a34/hello-repo/hello-app:v2
+
+save!
+
+Kembali ke terminal:
+cd manifests
+ls
+
+cmd: kubectl -n namespace name apply -f helloweb-deployment.yaml
+>>> kubectl -n gmp-bhfn apply -f helloweb-deployment.yaml
+--->deployment.apps/helloweb configured
+
+
+...tunggu sampai running
+
+kemudian:
+kubectl get pods -n namespace name
+>>> kubectl get pods -n gmp-bhfn
+
+NAME                               READY   STATUS              RESTARTS   AGE
+helloweb-6965d9fbc7-fp4n2          0/1     ContainerCreating   0          5s
+helloweb-76c456bd5d-s92lc          1/1     Running             0          23m
+prometheus-test-7545bf5c44-9zcqw   1/1     Running             0          57m
+prometheus-test-7545bf5c44-gjmvd   1/1     Running             0          4m26s
+prometheus-test-7545bf5c44-zc272   1/1     Running             0          57m
+
+
+
+kubectl - $NAMESPACE_NAME expose deployment helloweb\
+  --name=$SERVICE_NAME\
+  --type=LoadBalancer\
+  --port=8080\
+  --target-port=8080
+
+>>>
+kubectl expose deployment helloweb \
+    --name=helloweb-service-huhm \
+    --type=LoadBalancer \
+    --port=8080 \
+    --target-port=8080 \
+    -n gmp-bhfn
+
+Note: It may take a few minutes for the webpage to load.
+
+
+setelah 2-3 menit
+
+cek point!!! 
+100/100
+Alhamdulillah
+
+
+SUMBER
+>>>https://www.youtube.com/watch?v=Ixo6LIujVgoe
+
+
+
+
+
+
+
+
