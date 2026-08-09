@@ -82,90 +82,98 @@ Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel
     
 2. Buat Namespace baru: 
 
-bash
-
-kubectl create ns gmp-bhfn
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    kubectl create ns gmp-bhfn
+    
+    ```
+    
 3. Unduh file konfigurasi aplikasi contoh: 
 
-bash
-
-gcloud storage cp gs://spls/gsp510/prometheus-app.yaml .
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    gcloud storage cp gs://spls/gsp510/prometheus-app.yaml .
+    
+    ```
+    
 4. Buka Cloud Shell Editor dan perbarui file prometheus-app.yaml pada baris **35-38** (ganti tag <todo>): 
 
-yaml
+    yaml
+    
+    containers:
+      - name: prometheus-test
+        image: nilebox/prometheus-example-app:latest
+        ports:
+          - name: metrics
 
-containers:
-  - name: prometheus-test
-    image: nilebox/prometheus-example-app:latest
-    ports:
-      - name: metrics
 
-Gunakan kode dengan hati-hati.
 5. Deploy aplikasi ke cluster: 
 
-bash
-
-kubectl -n gmp-bhfn apply -f prometheus-app.yaml
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    kubectl -n gmp-bhfn apply -f prometheus-app.yaml
+    
+    ```
+    
 6. Unduh manifes pemantauan pod: 
 
-bash
-
-gcloud storage cp gs://spls/gsp510/pod-monitoring.yaml .
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    gcloud storage cp gs://spls/gsp510/pod-monitoring.yaml .
+    
+    ```
+    
 7. Buka Editor dan perbarui file pod-monitoring.yaml pada baris **18-24** (ganti tag <todo>): 
 
-yaml
+    yaml
+    
+    metadata:
+      name: prometheus-test
+    spec:
+      selector:
+        matchLabels:
+          app: prometheus-test
+      endpoints:
+        - interval: 50s
 
-metadata:
-  name: prometheus-test
-spec:
-  selector:
-    matchLabels:
-      app: prometheus-test
-  endpoints:
-    - interval: 50s
 
-Gunakan kode dengan hati-hati.
 8. Terapkan manifes pemantauan pod: 
 
-bash
-
-kubectl -n gmp-bhfn apply -f pod-monitoring.yaml
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    kubectl -n gmp-bhfn apply -f pod-monitoring.yaml
+    
+    ```
 
 📌 **Check progress untuk Task 2** 
+
 
 ### 📂 Task 3: Download Demo Application
 
 1. Unduh repositori aplikasi demo ke direktori lokal: 
 
-bash
-
-gcloud storage cp -r gs://spls/gsp510/hello-app/ .
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    gcloud storage cp -r gs://spls/gsp510/hello-app/ .
+    
+    ```
+    
 2. Pindah ke direktori manifests: 
 
-bash
-
-cd ~/hello-app/manifests
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    cd ~/hello-app/manifests
+    
+    ```
+    
 3. Deploy aplikasi demo awal: 
 
-bash
-
-kubectl -n gmp-bhfn apply -f helloweb-deployment.yaml
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    kubectl -n gmp-bhfn apply -f helloweb-deployment.yaml
+    
+    ```
+    
 
 📌 **Check progress untuk Task 3** 
 
@@ -209,32 +217,35 @@ Gunakan kode dengan hati-hati.
 1. Buka file ~/hello-app/manifests/helloweb-deployment.yaml menggunakan Editor.
 2. Ganti tag <todo> pada bagian kontainer gambar dengan baris berikut: 
 
-yaml
-
-image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
-
-Gunakan kode dengan hati-hati.
+    yaml
+    
+    image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
+    
+    
 3. Hapus deployment lama dari cluster untuk menghindari konflik data: 
 
-bash
-
-kubectl delete deployment helloweb -n gmp-bhfn
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    kubectl delete deployment helloweb -n gmp-bhfn
+    
+    ```
+    
 4. Deploy ulang manifes yang telah diperbarui: 
 
-bash
-
-kubectl -n gmp-bhfn apply -f helloweb-deployment.yaml
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    kubectl -n gmp-bhfn apply -f helloweb-deployment.yaml
+    
+    ```
+    
 5. Pastikan Pod baru telah berjalan dengan normal: 
 
-bash
-
-kubectl get pods -n gmp-bhfn
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    kubectl get pods -n gmp-bhfn
+    
+    ```
+    
 
 📌 **Check progress untuk Task 5** 
 
@@ -242,66 +253,74 @@ Gunakan kode dengan hati-hati.
 
 1. Buka file ~/hello-app/main.go di Editor, pergi ke **baris 49**, dan ubah teks versinya menjadi: 
 
-go
-
-Version: 2.0.0
-
-Gunakan kode dengan hati-hati.
+    go
+    
+    Version: 2.0.0
+    
+   
 2. Jalankan otentikasi Docker untuk Artifact Registry di Cloud Shell: 
 
-bash
-
-gcloud auth configure-docker us-west1-docker.pkg.dev
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    gcloud auth configure-docker us-west1-docker.pkg.dev
+    
+    ```
+    
 3. Masuk ke direktori utama aplikasi dan lakukan kompilasi (*build*) image v2: 
 
-bash
-
-cd ~/hello-app
-docker build -t us-west1-docker.pkg.dev/$PROJECT_ID/hello-repo/hello-app:v2 .
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    cd ~/hello-app
+    docker build -t us-west1-docker.pkg.dev/$PROJECT_ID/hello-repo/hello-app:v2 .
+    
+    ```
+    
 4. Unggah (*push*) kontainer baru Anda ke Artifact Registry: 
 
-bash
-
-docker push us-west1-docker.pkg.dev/$PROJECT_ID/hello-repo/hello-app:v2
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    docker push us-west1-docker.pkg.dev/$PROJECT_ID/hello-repo/hello-app:v2
+    
+    ```
+    
 5. Buka kembali file ~/hello-app/manifests/helloweb-deployment.yaml di Editor, ubah baris image ke alamat registri baru Anda: 
 
-yaml
+    yaml
+    
+    image: us-west1-docker.pkg.dev/qwiklabs-gcp-04-ed402c1f1a34/hello-repo/hello-app:v2
 
-image: us-west1-docker.pkg.dev/qwiklabs-gcp-04-ed402c1f1a34/hello-repo/hello-app:v2
 
-Gunakan kode dengan hati-hati.
 6. Terapkan perubahan manifes ke cluster: 
 
-bash
-
-cd ~/hello-app/manifests
-kubectl -n gmp-bhfn apply -f helloweb-deployment.yaml
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    cd ~/hello-app/manifests
+    kubectl -n gmp-bhfn apply -f helloweb-deployment.yaml
+    
+    ```
+    
 7. Buka akses deployment ke publik dengan membuat service berjenis LoadBalancer: 
 
-bash
-
-kubectl expose deployment helloweb \
-    --name=helloweb-service-huhm \
-    --type=LoadBalancer \
-    --port=8080 \
-    --target-port=8080 \
-    -n gmp-bhfn
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    kubectl expose deployment helloweb \
+        --name=helloweb-service-huhm \
+        --type=LoadBalancer \
+        --port=8080 \
+        --target-port=8080 \
+        -n gmp-bhfn
+    
+    ```
+    
 8. Periksa status IP publik secara berkala hingga kolom EXTERNAL-IP memunculkan alamat IP: 
 
-bash
+    ```bash
+    
+    kubectl get service helloweb-service-huhm -n gmp-bhfn
+    
+    ```
 
-kubectl get service helloweb-service-huhm -n gmp-bhfn
+    ... setelah 2-3 menit
 
-Gunakan kode dengan hati-hati.
-
+    
 📌 **Check progress untuk Task 6 & Selesai!**
