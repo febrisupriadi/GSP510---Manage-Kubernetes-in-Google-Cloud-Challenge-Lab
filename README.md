@@ -29,7 +29,6 @@ Parameter Value
 Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel proyek: 
 
     ```bash
-    
         export PROJECT_ID="qwiklabs-gcp-04-ed402c1f1a34"
         export CLUSTER_NAME="hello-world-1dh2"
         export REGION="us-west1"
@@ -38,6 +37,7 @@ Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel
         export REPO_NAME="hello-repo"
         export SERVICE_NAME="helloweb-service-huhm"
     ```
+    
 
 
 
@@ -57,16 +57,16 @@ Salin dan tempel perintah berikut di Cloud Shell untuk menginisialisasi variabel
 
 2. Lakukan pembaruan fitur (Autoscaling & Managed Prometheus) agar lulus penilaian lab: 
 
-bash
-
-gcloud container clusters update hello-world-1dh2 \
-    --enable-autoscaling \
-    --enable-managed-prometheus \
-    --min-nodes=2 \
-    --max-nodes=6 \
-    --zone=us-west1-a
-
-Gunakan kode dengan hati-hati.
+    ```bash    
+    gcloud container clusters update hello-world-1dh2 \
+        --enable-autoscaling \
+        --enable-managed-prometheus \
+        --min-nodes=2 \
+        --max-nodes=6 \
+        --zone=us-west1-a
+    ```
+    
+    
 
 📌 **Check progress untuk Task 1** 
 
@@ -74,11 +74,12 @@ Gunakan kode dengan hati-hati.
 
 1. Ambil kredensial autentikasi cluster: 
 
-bash
-
-gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE
-
-Gunakan kode dengan hati-hati.
+    ```bash
+    
+    gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE
+    
+    ```
+    
 2. Buat Namespace baru: 
 
 bash
